@@ -1,0 +1,9 @@
+{
+	"name": "julioacfactoriados",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "7845e884-e57a-40e1-837a-8c48177f9203",
+		"tenantId": "035d117b-685e-4782-8641-d83d3613d36f"
+	}
+}
