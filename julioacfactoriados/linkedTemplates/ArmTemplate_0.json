@@ -413,6 +413,89 @@
 				"[concat(variables('factoryId'), '/datasets/ArchivosINPUTCopy')]",
 				"[concat(variables('factoryId'), '/datasets/ArchivoCopyOUTPUTADLS')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pip_execute')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Pipe_Bronce",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pip_capabronce",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Pipe_Plata",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Pipe_Bronce",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pip_capaplata",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "Pipe_Oro",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Pipe_Plata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pip_capaoro",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pip_capabronce')]",
+				"[concat(variables('factoryId'), '/pipelines/pip_capaplata')]",
+				"[concat(variables('factoryId'), '/pipelines/pip_capaoro')]"
+			]
 		}
 	]
 }
